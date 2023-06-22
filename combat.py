@@ -87,7 +87,7 @@ class Combat:
                     if self.enemy.hand:
                         card_name_to_play = self.enemy.choose_card(self.enemy.pips)
                         if card_name_to_play:
-                            card_to_play = cards.get_card(card_name_to_play)  # Get card object from name
+                            card_to_play = get_card(card_name_to_play)  # Get card object from name
                     else:
                         print("Enemy has no valid cards to play, skipping turn.")
                         break

@@ -38,10 +38,14 @@ class Enemy:
 
     def play_card(self, card, target):
         if self.pips >= card.cost:
-            self.pips -= card.cost
-            card.effect(target, card.damage)
+            accuracy = random.random()  # Returns a random float between 0 and 1
+            if accuracy <= card.get_accuracy():  # Assuming card has an accuracy attribute
+                print(f"{self.name} used {card.name} and dealt {card.damage} damage!")
+                self.pips -= card.cost
+                card.effect(target, card.damage)
+            else:
+                print(f"{self.name} fizzled!")
             self.hand.remove(card.name)  # Use card.name instead of card
-            print(f"{self.name} used {card.name} and dealt {card.damage} damage!")
             new_card = self.deck.draw()  # Draw a new card
             if new_card:
                 self.hand.append(new_card)  # Add the new card to the hand

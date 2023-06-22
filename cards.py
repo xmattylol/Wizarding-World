@@ -37,6 +37,9 @@ class Spell(Card):
     def get_cost(self):
         return self.cost
 
+    def get_accuracy(self):
+        return self.accuracy
+
 
 class Item:
     def __init__(self, name, description, effect):
@@ -132,50 +135,50 @@ class Aura(Card):
 
 
 # Spells for Fire class
-fire_cat = Spell("Fire Cat", "Fire", 1, 100, 80, "Deals 80 Fire damage", "images/Fire_Cat.png", "single target", Spell.damage_effect)
-fire_elf = Spell("Fire Elf", "Fire", 2, 100, 225, "Deals 225 Fire damage over 3 rounds", "images/Fire_Elf.png",
+fire_cat = Spell("Fire Cat", "Fire", 1, .75, 80, "Deals 80 Fire damage", "images/Fire_Cat.png", "single target", Spell.damage_effect)
+fire_elf = Spell("Fire Elf", "Fire", 2, .75, 225, "Deals 225 Fire damage over 3 rounds", "images/Fire_Elf.png",
                  "single target", Spell.damage_effect)
-sunbird = Spell("Sunbird", "Fire", 3, 100, 335, "Deals 335 Fire damage", "images/Sunbird.png", "single target", Spell.damage_effect)
-helephant = Spell("Helephant", "Fire", 6, 100, 415, "Deals 660 Fire damage", "images/Helephant.png", "single target",
+sunbird = Spell("Sunbird", "Fire", 3, .75, 335, "Deals 335 Fire damage", "images/Sunbird.png", "single target", Spell.damage_effect)
+helephant = Spell("Helephant", "Fire", 6, .75, 415, "Deals 660 Fire damage", "images/Helephant.png", "single target",
                   Spell.damage_effect)
 # dragon = Spell("Dragon", "Fire", 10, 100, 510, "Deals 510 Fire damage", "images/Dragon.png", "single target", None)
 
 # Spells for Ice class
-frost_beetle = Spell("Frost Beetle", "Ice", 1, 100, 65, "Deals 65 Ice damage", "images/(Spell)_Frost_Beetle.png",
+frost_beetle = Spell("Frost Beetle", "Ice", 1, .80, 65, "Deals 65 Ice damage", "images/(Spell)_Frost_Beetle.png",
                      "single target", Spell.damage_effect)
-snow_shield = Spell("Snow Shield", "Ice", 0, 100, 0, "Adds a 250 Ice shield to the caster",
+snow_shield = Spell("Snow Shield", "Ice", 0, .100, 0, "Adds a 250 Ice shield to the caster",
                     "images/(Spell)_Snow_Shield.png", "self", None)
-snow_serpent = Spell("Snow Serpent", "Ice", 2, 100, 160, "Deals 160 Ice damage", "images/(Spell)_Snow_Serpent.png",
+snow_serpent = Spell("Snow Serpent", "Ice", 2, .80, 160, "Deals 160 Ice damage", "images/(Spell)_Snow_Serpent.png",
                      "single target", Spell.damage_effect)
-evil_snowman = Spell("Evil Snowman", "Ice", 3, 100, 265, "Deals 265 Ice damage", "images/(Spell)_Evil_Snowman.png",
+evil_snowman = Spell("Evil Snowman", "Ice", 3, .80, 265, "Deals 265 Ice damage", "images/(Spell)_Evil_Snowman.png",
                      "single target", Spell.damage_effect)
 # frostbite = Spell("Frostbite", "Ice", 5, 100, 290, "Deals 290 Ice damage and reduces target's accuracy by 25%", "images/frostbite.png", "single target", None)
-blizzard = Spell("Blizzard", "Ice", 4, 100, 290, "Deals 290 Ice damage to all enemies", "images/blizzard.png",
+blizzard = Spell("Blizzard", "Ice", 4, .80, 290, "Deals 290 Ice damage to all enemies", "images/blizzard.png",
                  "all enemies", None)
 # winters_revenge = Spell("Winter's Revenge", "Ice", 9, 100, 450, "Deals 450 Ice damage and stuns the target for 1 round", "images/winters_revenge.png", "single target", None)
 
 # Spells for Storm class
-thunder_snake = Spell("Thunder Snake", "Storm", 1, 100, 125, "Deals 125 Storm damage",
+thunder_snake = Spell("Thunder Snake", "Storm", 1, .70, 125, "Deals 125 Storm damage",
                       "images/(Spell)_Thunder_Snake.png", "single target", Spell.damage_effect)
-storm_shield = Spell("Storm Shield", "Storm", 0, 100, 0, "Adds a 250 Storm shield to the caster",
+storm_shield = Spell("Storm Shield", "Storm", 0, .100, 0, "Adds a 250 Storm shield to the caster",
                      "images/(Spell)_Storm_Shield.png", "self", None)
-lightning_bats = Spell("Lightning Bats", "Storm", 2, 100, 250, "Deals 250 Storm damage",
+lightning_bats = Spell("Lightning Bats", "Storm", 2, .70, 250, "Deals 250 Storm damage",
                        "images/(Spell)_Lightning_Bats.png", "single target", Spell.damage_effect)
-tempest = Spell("Tempest", "Storm", 4, 100, 345, "Deals 345 Storm damage to all enemies", "images/(Spell)_Tempest.png",
+tempest = Spell("Tempest", "Storm", 4, .70, 345, "Deals 345 Storm damage to all enemies", "images/(Spell)_Tempest.png",
                 "all enemies", None)
-storm_shark = Spell("Storm Shark", "Storm", 3, 100, 400, "Deals 400 Storm damage", "images/(Spell)_Storm_Shark.png",
+storm_shark = Spell("Storm Shark", "Storm", 3, .70, 400, "Deals 400 Storm damage", "images/(Spell)_Storm_Shark.png",
                     "single target", Spell.damage_effect)
 
 # Spells for Myth class
 #sprite = Spell("Sprite", "myth", 1, "Heals 300 health to the target", "single target")
 # myth_shield = Spell("Myth Shield", "myth", 3, "Adds a 250 Myth shield to the caster", "self")
-blood_bat = Spell("Blood Bat", "Myth", 1, 80, 110, "Deals 110 Myth damage", "images/(Spell)_Blood_Bat.png",
+blood_bat = Spell("Blood Bat", "Myth", 1, .80, 110, "Deals 110 Myth damage", "images/(Spell)_Blood_Bat.png",
                   "single target", Spell.damage_effect)
-troll = Spell("Troll", "Myth", 2, 80, 210, "Deals 210 Myth damage", "images/(Spell)_Troll.png",
+troll = Spell("Troll", "Myth", 2, .80, 210, "Deals 210 Myth damage", "images/(Spell)_Troll.png",
                   "single target", Spell.damage_effect)
-cyclops = Spell("Troll", "Myth", 3, 80, 325, "Deals 325 Myth damage", "images/(Spell)_Cyclops.png",
+cyclops = Spell("Troll", "Myth", 3, .80, 325, "Deals 325 Myth damage", "images/(Spell)_Cyclops.png",
                   "single target", Spell.damage_effect)
-humongofrog = Spell("Humongofrog", "Myth", 4, 80, 325, "Deals 325 Myth damage to all enemies", "images/(Spell)_Humongofrog.png",
+humongofrog = Spell("Humongofrog", "Myth", 4, .80, 325, "Deals 325 Myth damage to all enemies", "images/(Spell)_Humongofrog.png",
                   "all enemies", None)
 # orthrus = Spell("Orthrus", "myth", 7, "Deals 345 Myth damage to all enemies", "all enemies")
 # medusa = Spell("Medusa", "myth", 9, "Deals 425 Myth damage and converts it to a healing effect for the caster",
@@ -183,35 +186,35 @@ humongofrog = Spell("Humongofrog", "Myth", 4, 80, 325, "Deals 325 Myth damage to
 
 
 # Spells for Death class
-dark_sprite = Spell("Dark Sprite", "Death", 1, 85, 105, "Deals 105 Death damage", "images/(Spell)_Dark_Sprite.png",
+dark_sprite = Spell("Dark Sprite", "Death", 1, .85, 105, "Deals 105 Death damage", "images/(Spell)_Dark_Sprite.png",
                   "single target", Spell.damage_effect)
-ghoul = Spell("Ghoul", "Death", 2, 85, 160, "Deals 160 Death drain damage and heals the caster for half the Damage dealt", "images/(Spell)_Ghoul.png",
+ghoul = Spell("Ghoul", "Death", 2, .85, 160, "Deals 160 Death drain damage and heals the caster for half the Damage dealt", "images/(Spell)_Ghoul.png",
                   "single target", Spell.damage_effect)
-banshee = Spell("Banshee", "Death", 3, 85, 305, "Deals 305 Death damage", "images/(Spell)_Banshee.png",
+banshee = Spell("Banshee", "Death", 3, .85, 305, "Deals 305 Death damage", "images/(Spell)_Banshee.png",
                   "single target", Spell.damage_effect)
-vampire = Spell("Vampire", "Death", 3, 85, 335, "Deals 335 Death drain damage", "images/(Spell)_Vampire.png",
+vampire = Spell("Vampire", "Death", 3, .85, 335, "Deals 335 Death drain damage", "images/(Spell)_Vampire.png",
                   "single target", Spell.damage_effect)
-skeletal_pirate = Spell("Skeletal Pirate", "Death", 5, 85, 510, "Deals 510 Death damage", "images/(Spell)_Skeletal_Pirate.png",
+skeletal_pirate = Spell("Skeletal Pirate", "Death", 5, .85, 510, "Deals 510 Death damage", "images/(Spell)_Skeletal_Pirate.png",
                   "single target", Spell.damage_effect)
 
 # Spells for Life class
-imp = Spell("Imp", "Life", 1, 90, 105, "Deals 105 Life damage", "images/(Spell)_Imp.png",
+imp = Spell("Imp", "Life", 1, .90, 105, "Deals 105 Life damage", "images/(Spell)_Imp.png",
                   "single target", Spell.damage_effect)
-leprechaun = Spell("Leprechaun", "Life", 2, 90, 195, "Deals 195 Life damage", "images/(Spell)_Leprechaun.png",
+leprechaun = Spell("Leprechaun", "Life", 2, .90, 195, "Deals 195 Life damage", "images/(Spell)_Leprechaun.png",
                   "single target", Spell.damage_effect)
-seraph = Spell("Seraph", "Life", 4, 90, 395, "Deals 395 Life damage", "images/(Spell)_Seraph.png",
+seraph = Spell("Seraph", "Life", 4, .90, 395, "Deals 395 Life damage", "images/(Spell)_Seraph.png",
                   "single target", Spell.damage_effect)
-earth_walker = Spell("Earth Walker", "Life", 5, 90, 500, "Deals 500 Life damage", "images/(Spell)_Earth_Walker.png",
+earth_walker = Spell("Earth Walker", "Life", 5, .90, 500, "Deals 500 Life damage", "images/(Spell)_Earth_Walker.png",
                   "single target", Spell.damage_effect)
 
 # Spells for Balance class
-scarab = Spell("Scarab", "Balance", 1, 85, 105, "Deals 105 Balance damage", "images/(Spell)_Scarab.png",
+scarab = Spell("Scarab", "Balance", 1, .85, 105, "Deals 105 Balance damage", "images/(Spell)_Scarab.png",
                "single target", Spell.damage_effect)
-scorpion = Spell("Scorpion", "Balance", 2, 85, 200, "Deals 200 Balance damage", "images/(Spell)_Scorpion.png",
+scorpion = Spell("Scorpion", "Balance", 2, .85, 200, "Deals 200 Balance damage", "images/(Spell)_Scorpion.png",
                "single target", Spell.damage_effect)
-locust_swarm = Spell("Locust Swarm", "Balance", 3, 85, 305, "Deals 305 Balance damage", "images/(Spell)_Locust_Swarm.png",
+locust_swarm = Spell("Locust Swarm", "Balance", 3, .85, 305, "Deals 305 Balance damage", "images/(Spell)_Locust_Swarm.png",
                "single target", Spell.damage_effect)
-sandstorm = Spell("Sandstorm", "Balance", 4, 85, 295, "Deals 295 Balance damage to all enemies", "images/(Spell)_Sandstorm.png",
+sandstorm = Spell("Sandstorm", "Balance", 4, .85, 295, "Deals 295 Balance damage to all enemies", "images/(Spell)_Sandstorm.png",
                "single target", Spell.damage_effect)
 
 
@@ -254,8 +257,17 @@ card_instances = {
     "Imp": imp,
     "Leprechaun": leprechaun,
     "Seraph": seraph,
+    "Earth Walker": earth_walker,
+
+    # Balance Cards:
+    "Scarab": scarab,
+    "Scorpion": scorpion,
+    "Locust Swarm": locust_swarm,
+    "Sandstorm": sandstorm
 
 }
 
 def get_card(card_name):
     return card_instances.get(card_name)
+
+

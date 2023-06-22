@@ -39,7 +39,19 @@ def class_menu():
 def tutorial(selected_class):
     print("Tutorial starting...")
 
-    player = Character(name="Player", class_type=selected_class, max_health=1500, max_mana=50, deck=starter_deck)
+    class_dict = {
+        'Storm': Storm,
+        'Fire': Fire,
+        'Ice': Ice,
+        'Life': Life,
+        'Myth': Myth,
+        'Death': Death,
+        'Balance': Balance
+    }
+
+    player_class = class_dict[selected_class]
+    player = player_class(name="Player", max_health=1500, max_mana=50,
+                       deck=starter_deck, power_pip_percentage=0.5, learned_spells=[])
     golem = Enemy("Golem", 1000, 0.5, golem_deck, "Myth")
 
     combat = Combat(player, golem)
