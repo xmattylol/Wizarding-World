@@ -4,7 +4,7 @@ from cards import *
 
 
 class Character:
-    def __init__(self, name, class_type, max_health, max_mana, deck):
+    def __init__(self, name, class_type, max_health, max_mana, deck, power_pip_percentage, learned_spells):
         self.name = name
         self.class_type = class_type
         self.max_health = max_health
@@ -14,6 +14,8 @@ class Character:
         self.deck = deck
         self.hand = deck.current_hand
         self.pips = 0
+        self.power_pip_percentage = power_pip_percentage
+        self.learned_spells = learned_spells
 
     def __str__(self):
         return f"{self.name} ({self.class_type}): Health={self.health}, Mana={self.mana}, Pips={self.pips}"
@@ -64,6 +66,15 @@ class Character:
     def discard_card(self, card):
         self.deck.append(card)
 
+    def generate_power_pip(self):
+        return random.random(0, 1) < self.power_pip_percentage
+
+    def learn_spell(self, spell):
+        self.learned_spells.append(spell)
+
+    def forget_spell(self, spell):
+        self.learned_spells.remove(spell)
+
     def get_info(self):
         info = "Name: {}\nClass: {}\nHealth: {}/{}\nMana: {}/{}\n".format(
             self.name, self.class_type, self.health, self.max_health, self.mana, self.max_mana)
@@ -108,21 +119,43 @@ class Character:
 
 
 
-#
-# class StormCharacter(Character):
-#     def __init__(self, name):
-#         super().__init__(name, max_health=100, max_mana=50)
-#         self.storm_damage = 20
-#         self.deck = [cards.Spell("Lightning Bolt", "Deals {} storm damage".format(self.storm_damage), self.storm_damage)]
-#
-#
-# class FireCharacter(Character):
-#     def __init__(self, name):
-#         super().__init__(name, max_health=120, max_mana=40)
-#         self.fire_damage = 15
-#         self.deck = [cards.Spell("Fireball", "Deals {} fire damage".format(self.fire_damage), self.fire_damage)]
 
 
+
+class Storm(Character):
+    def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+        super().__init__(name, 'Storm', max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        self.learned_spells.append('Thunder Snake')  # Example starter spell for Storm
+
+class Fire(Character):
+    def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+        super().__init__(name, 'Fire', max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        self.learned_spells.append('Fire Cat')  # Example starter spell for Fire
+
+class Ice(Character):
+    def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+        super().__init__(name, 'Ice', max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        self.learned_spells.append('Frost Beetle')
+
+class Myth(Character):
+    def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+        super().__init__(name, 'Myth', max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        self.learned_spells.append('Blood Bat')
+
+class Death(Character):
+    def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+        super().__init__(name, 'Death', max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        self.learned_spells.append('Dark Sprite')
+
+class Life(Character):
+    def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+        super().__init__(name, 'Life', max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        self.learned_spells.append('Imp')
+
+class Balance(Character):
+    def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+        super().__init__(name, 'Balance', max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        self.learned_spells.append('Scarab')
 # class Party:
 #     def __init__(self):
 #         self.characters = []

@@ -129,6 +129,8 @@ class Aura(Card):
 # for card in cards:
 #     print(card.name, card.school, card.cost, card.effect)
 
+
+
 # Spells for Fire class
 fire_cat = Spell("Fire Cat", "Fire", 1, 100, 80, "Deals 80 Fire damage", "images/Fire_Cat.png", "single target", Spell.damage_effect)
 fire_elf = Spell("Fire Elf", "Fire", 2, 100, 225, "Deals 225 Fire damage over 3 rounds", "images/Fire_Elf.png",
@@ -165,30 +167,94 @@ storm_shark = Spell("Storm Shark", "Storm", 3, 100, 400, "Deals 400 Storm damage
                     "single target", Spell.damage_effect)
 
 # Spells for Myth class
-# sprite = Spell("Sprite", "myth", 1, "Heals 300 health to the target", "single target")
+#sprite = Spell("Sprite", "myth", 1, "Heals 300 health to the target", "single target")
 # myth_shield = Spell("Myth Shield", "myth", 3, "Adds a 250 Myth shield to the caster", "self")
-# minotaur = Spell("Minotaur", "myth", 5, "Deals 290 Myth damage and stuns the target for 1 round", "single target")
+blood_bat = Spell("Blood Bat", "Myth", 1, 80, 110, "Deals 110 Myth damage", "images/(Spell)_Blood_Bat.png",
+                  "single target", Spell.damage_effect)
+troll = Spell("Troll", "Myth", 2, 80, 210, "Deals 210 Myth damage", "images/(Spell)_Troll.png",
+                  "single target", Spell.damage_effect)
+cyclops = Spell("Troll", "Myth", 3, 80, 325, "Deals 325 Myth damage", "images/(Spell)_Cyclops.png",
+                  "single target", Spell.damage_effect)
+humongofrog = Spell("Humongofrog", "Myth", 4, 80, 325, "Deals 325 Myth damage to all enemies", "images/(Spell)_Humongofrog.png",
+                  "all enemies", None)
 # orthrus = Spell("Orthrus", "myth", 7, "Deals 345 Myth damage to all enemies", "all enemies")
 # medusa = Spell("Medusa", "myth", 9, "Deals 425 Myth damage and converts it to a healing effect for the caster",
 #              "single target")
 
 
+# Spells for Death class
+dark_sprite = Spell("Dark Sprite", "Death", 1, 85, 105, "Deals 105 Death damage", "images/(Spell)_Dark_Sprite.png",
+                  "single target", Spell.damage_effect)
+ghoul = Spell("Ghoul", "Death", 2, 85, 160, "Deals 160 Death drain damage and heals the caster for half the Damage dealt", "images/(Spell)_Ghoul.png",
+                  "single target", Spell.damage_effect)
+banshee = Spell("Banshee", "Death", 3, 85, 305, "Deals 305 Death damage", "images/(Spell)_Banshee.png",
+                  "single target", Spell.damage_effect)
+vampire = Spell("Vampire", "Death", 3, 85, 335, "Deals 335 Death drain damage", "images/(Spell)_Vampire.png",
+                  "single target", Spell.damage_effect)
+skeletal_pirate = Spell("Skeletal Pirate", "Death", 5, 85, 510, "Deals 510 Death damage", "images/(Spell)_Skeletal_Pirate.png",
+                  "single target", Spell.damage_effect)
+
+# Spells for Life class
+imp = Spell("Imp", "Life", 1, 90, 105, "Deals 105 Life damage", "images/(Spell)_Imp.png",
+                  "single target", Spell.damage_effect)
+leprechaun = Spell("Leprechaun", "Life", 2, 90, 195, "Deals 195 Life damage", "images/(Spell)_Leprechaun.png",
+                  "single target", Spell.damage_effect)
+seraph = Spell("Seraph", "Life", 4, 90, 395, "Deals 395 Life damage", "images/(Spell)_Seraph.png",
+                  "single target", Spell.damage_effect)
+earth_walker = Spell("Earth Walker", "Life", 5, 90, 500, "Deals 500 Life damage", "images/(Spell)_Earth_Walker.png",
+                  "single target", Spell.damage_effect)
+
+# Spells for Balance class
+scarab = Spell("Scarab", "Balance", 1, 85, 105, "Deals 105 Balance damage", "images/(Spell)_Scarab.png",
+               "single target", Spell.damage_effect)
+scorpion = Spell("Scorpion", "Balance", 2, 85, 200, "Deals 200 Balance damage", "images/(Spell)_Scorpion.png",
+               "single target", Spell.damage_effect)
+locust_swarm = Spell("Locust Swarm", "Balance", 3, 85, 305, "Deals 305 Balance damage", "images/(Spell)_Locust_Swarm.png",
+               "single target", Spell.damage_effect)
+sandstorm = Spell("Sandstorm", "Balance", 4, 85, 295, "Deals 295 Balance damage to all enemies", "images/(Spell)_Sandstorm.png",
+               "single target", Spell.damage_effect)
+
+
 # Create a dictionary mapping card names to instances
 card_instances = {
+    # Fire Cards:
     "Fire Cat": fire_cat,
     "Fire Elf": fire_elf,
     "Sunbird": sunbird,
     "Helephant": helephant,
+
+    # Ice Cards:
     "Frost Beetle": frost_beetle,
     "Snow Shield": snow_shield,
     "Snow Serpent": snow_serpent,
     "Evil Snowman": evil_snowman,
     "Blizzard": blizzard,
+
+    # Storm Cards:
     "Thunder Snake": thunder_snake,
     "Storm Shield": storm_shield,
     "Lightning Bats": lightning_bats,
     "Tempest": tempest,
     "Storm Shark": storm_shark,
+
+    # Myth Cards:
+    "Blood Bat": blood_bat,
+    "Troll": troll,
+    "Cyclops": cyclops,
+    "Humongofrog": humongofrog,
+
+    # Death Cards:
+    "Dark Sprite": dark_sprite,
+    "Ghoul": ghoul,
+    "Banshee": banshee,
+    "Vampire": vampire,
+    "Skeletal Pirate": skeletal_pirate,
+
+    # Life Cards:
+    "Imp": imp,
+    "Leprechaun": leprechaun,
+    "Seraph": seraph,
+
 }
 
 def get_card(card_name):
