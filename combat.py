@@ -5,6 +5,8 @@ class Combat:
         self.enemy = enemy
         self.current_turn = None  # Represents who's turn it is. None represents the start of a new round
         self.in_combat = True
+        self.target = None  # Initialize the target to None. We will update this during each turn.
+
 
     def start(self):
         print("Battle starting...")
@@ -60,7 +62,8 @@ class Combat:
                 card_to_play = get_card(card_name_to_play)
                 if self.player.deck.count_cards(card_to_play.name) > 0:  # Check if the card is still available in the deck
                     if self.player.pips >= card_to_play.cost:
-                        self.player.play_card(card_to_play, self.enemy)
+                        self.target = self.enemy  # Sets the players target to the enemy | Needs updating for multiple enemies
+                        self.player.play_card(card_to_play, self)
                         self.current_turn = self.enemy
                     else:
                         print(
@@ -80,7 +83,8 @@ class Combat:
             if card_name_to_play:
                 card_to_play = get_card(card_name_to_play)  # Get card object from name
                 if self.enemy.pips >= card_to_play.cost:
-                    self.enemy.play_card(card_to_play, self.player)  # Pass card object, not name
+                    self.target = self.player  # The target during the enemy's turn is the player.
+                    self.enemy.play_card(card_to_play, self)  # Pass card object, not name
                     card_played = True
                 else:
                     self.enemy.hand.remove(card_to_play.name)

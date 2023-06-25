@@ -43,6 +43,7 @@ class Deck:
         return False
 
     def equip(self):
+        print("Equipping deck...")
         # Shuffle the deck
         self.shuffle()
         # Draw the initial hand
@@ -74,6 +75,7 @@ class Deck:
             self.current_hand.append(treasure_card)
 
     def refresh_hand(self):
+        print("Refreshing hand...")
         # Discard the current hand
         self.discard_pile.extend(self.current_hand)
         self.current_hand = []
@@ -89,6 +91,7 @@ class Deck:
         return sum(1 for c in self.cards if c == card)
 
     def shuffle(self):
+        print("Shuffling deck...")
         card_pool = [card for card, count in self.cards.items() for _ in range(count)]
         random.shuffle(card_pool)
         self.shuffled_cards = card_pool
@@ -146,9 +149,19 @@ golem_deck_data = {
     'sunbird': 1,
     'thunder_snake': 2,
 }
+fire_deck_data = {
+    'fire_cat': 3,
+    'fire_elf': 2,
+    'sunbird': 2,
+    'helephant': 1,
+    'fire_blade': 3
+
+}
+
 
 starter_deck = create_deck(starter_deck_data, max_size=30, max_copies=4)
 golem_deck = create_deck(golem_deck_data, max_size=30, max_copies=4)
+fire_deck = create_deck(fire_deck_data, max_size=30, max_copies=4)
 
 for card, count in starter_deck_data.items():
     for _ in range(count):

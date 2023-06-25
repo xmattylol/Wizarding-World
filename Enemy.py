@@ -1,5 +1,7 @@
 import random
 import cards
+from cards import *
+
 class Enemy:
     def __init__(self, name, max_health, attack_power, deck, class_type):
         self.name = name
@@ -11,6 +13,18 @@ class Enemy:
         self.hand = deck.current_hand
         self.pips = 0
 
+
+        self.damage_boosts = {
+            'Storm': 0,
+            'Ice': 0,
+            'Fire': 0,
+            'Death': 0,
+            'Myth': 0,
+            'Life': 0,
+            'Balance': 0
+        }
+
+
     def __str__(self):
         return f"{self.name} ({self.class_type}): Health={self.health}, Pips={self.pips}"
 
@@ -21,6 +35,20 @@ class Enemy:
         self.health -= amount
         if self.health < 0:
             self.health = 0
+
+    def add_damage_boost(self, school, boost):
+        if school == 'Balance':
+            for school in self.damage_boosts.keys():
+                self.damage_boosts[school] += boost
+        else:
+            self.damage_boosts[school] += boost
+
+    def use_damage_boost(self, school, base_damage):
+        boost = self.damage_boosts[school]
+        boosted_damage = base_damage * (1 + boost/100)
+        # Consume the damage boost
+        self.damage_boosts[school] = 0
+        return boosted_damage
 
     def display_stats(self, screen, font):
         # Display enemy health
@@ -36,13 +64,22 @@ class Enemy:
         else:
             return None
 
-    def play_card(self, card, target):
+    def play_card(self, card, combat_instance):
         if self.pips >= card.cost:
-            accuracy = random.random()  # Returns a random float between 0 and 1
-            if accuracy <= card.get_accuracy():  # Assuming card has an accuracy attribute
-                print(f"{self.name} used {card.name} and dealt {card.damage} damage!")
+            if card.check_accuracy():  # If card doesn't fizzle:
+                # print(f"Accuracy tested against: {accuracy} | Card accuracy: {card.get_accuracy()}") # for debug
+
+                if isinstance(card, Spell):  # If Spell
+                    # Use and consume any applicable damage boost
+                    boosted_damage = self.use_damage_boost(card.school, card.damage)
+                    print(f"{self.name} used {card.name} and dealt {boosted_damage} damage!")
+                    card.apply_effect(self, combat_instance.target, boosted_damage)  # Pass the card's damage to the effect
+
+                elif isinstance(card, Blade):  # If Blade
+                    print(f"{self.name} used {card.name} and applied a blade!")
+                    card.apply_effect(self)  # Pass only the caster to blade's effect
+
                 self.pips -= card.cost
-                card.effect(target, card.damage)
             else:
                 print(f"{self.name} fizzled!")
             self.hand.remove(card.name)  # Use card.name instead of card

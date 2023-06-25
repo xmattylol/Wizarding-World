@@ -51,7 +51,7 @@ def tutorial(selected_class):
 
     player_class = class_dict[selected_class]
     player = player_class(name="Player", max_health=1500, max_mana=50,
-                       deck=starter_deck, power_pip_percentage=0.5, learned_spells=[])
+                       deck=fire_deck, power_pip_percentage=0.5, learned_spells=[])
     golem = Enemy("Golem", 1000, 0.5, golem_deck, "Myth")
 
     combat = Combat(player, golem)

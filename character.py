@@ -4,9 +4,9 @@ from cards import *
 
 
 class Character:
-    def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+    def __init__(self, name, class_type, max_health, max_mana, deck, power_pip_percentage, learned_spells):
         self.name = name
-        #self.class_type = class_type
+        self.class_type = class_type
         self.max_health = max_health
         self.health = max_health
         self.max_mana = max_mana
@@ -16,6 +16,16 @@ class Character:
         self.pips = 0
         self.power_pip_percentage = power_pip_percentage
         self.learned_spells = learned_spells
+
+        self.damage_boosts = {
+            'Storm': 0,
+            'Ice': 0,
+            'Fire': 0,
+            'Death': 0,
+            'Myth': 0,
+            'Life': 0,
+            'Balance': 0
+        }
 
     def take_damage(self, damage):
         self.health -= damage
@@ -31,14 +41,26 @@ class Character:
         if self.mana > self.max_mana:
             self.mana = self.max_mana
 
+    def add_damage_boost(self, school, boost):
+        self.damage_boosts[school] += boost
+
+    def use_damage_boost(self, school, base_damage):
+        boost = self.damage_boosts[school]
+        boosted_damage = base_damage * (1 + boost/100)
+        # Consume the damage boost
+        self.damage_boosts[school] = 0
+        return boosted_damage
+
     def draw_card(self):
-        if len(self.deck) > 0:
-            return self.deck.pop(0)
-        else:
-            return None
+        return self.deck.draw()
+        # if len(self.deck) > 0:
+        #     return self.deck.pop(0)
+        # else:
+        #     return None
 
     def shuffle_deck(self):
-        random.shuffle(self.deck)
+        self.deck.shuffle()
+        #random.shuffle(self.deck)
 
     def is_defeated(self):
         return self.health == 0
@@ -58,26 +80,34 @@ class Character:
     #             self.hand.append(new_card)  # Add the new card to the hand
     #     else:
     #         print("Not enough pips to play this card!")
-    def play_card(self, card, target):
+    def play_card(self, card, combat_instance):
         card_cost = card.get_cost()
         if self.pips >= card_cost:
             self.mana -= card_cost
             print(f"Card played: {card.name}")
-            accuracy = random.random()  # Returns a random float between 0 and 1
-            if accuracy <= card.get_accuracy():  # Assuming card has an accuracy attribute
-                print(f"Accuracy tested against: {accuracy} | Card accuracy: {card.get_accuracy()}")
-                print(f"{self.name} used {card.name} and dealt {card.damage} damage!")
+            if card.check_accuracy():  # If card doesn't fizzle:
+                #print(f"Accuracy tested against: {accuracy} | Card accuracy: {card.get_accuracy()}") # for debug
+
+                if isinstance(card, Spell):  # If Spell
+                    # Use and consume any applicable damage boost
+                    boosted_damage = self.use_damage_boost(card.school, card.damage)
+                    print(f"{self.name} used {card.name} and dealt {boosted_damage} damage!")
+                    card.apply_effect(self, combat_instance.target, boosted_damage)  # Pass the card's damage to the effect
+
+                elif isinstance(card, Blade):  # If Blade
+                    print(f"{self.name} used {card.name} and applied a blade!")
+                    card.apply_effect(self)  # Pass only the caster to blade's effect
+
                 self.pips -= card_cost
-                card.effect(target, card.damage)  # Pass the card's damage to the effect
             else:
                 print(f"{self.name} fizzled!")
-            self.deck.discard_card(card)  # Discard the played card
+            self.deck.discard_card(card.name)  # Discard the played card
             self.hand.remove(card.name)  # Remove the played card from the hand
             new_card = self.deck.draw()  # Draw a new card
             if new_card:
                 self.hand.append(new_card)  # Add the new card to the hand
-        else:
-            print("Not enough pips to play this card!")
+            else:
+                print(f"{self.name} does not have enough pips to use {card.name}.")
 
 
     def discard_card(self, card):
@@ -145,45 +175,41 @@ class Character:
 
 class Storm(Character):
     def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
-        super().__init__(name, max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        super().__init__(name, 'Storm', max_health, max_mana, deck, power_pip_percentage, learned_spells)
         self.learned_spells.append('Thunder Snake')  # Example starter spell for Storm
-    class_type = 'Storm'
 
 class Fire(Character):
     def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
-        super().__init__(name, max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        super().__init__(name, 'Fire', max_health, max_mana, deck, power_pip_percentage, learned_spells)
         self.learned_spells.append('Fire Cat')  # Example starter spell for Fire
-    class_type = 'Fire'
 
 class Ice(Character):
     def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
-        super().__init__(name, max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        super().__init__(name, 'Ice', max_health, max_mana, deck, power_pip_percentage, learned_spells)
         self.learned_spells.append('Frost Beetle')
-    class_type = 'Ice'
+#    class_type = 'Ice'
 
 class Myth(Character):
     def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
-        super().__init__(name, max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        super().__init__(name, 'Myth', max_health, max_mana, deck, power_pip_percentage, learned_spells)
         self.learned_spells.append('Blood Bat')
-    class_type = 'Myth'
 
 class Death(Character):
     def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
-        super().__init__(name, max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        super().__init__(name, 'Death', max_health, max_mana, deck, power_pip_percentage, learned_spells)
         self.learned_spells.append('Dark Sprite')
-    class_type = 'Death'
 
 class Life(Character):
     def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
-        super().__init__(name, max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        super().__init__(name, 'Life', max_health, max_mana, deck, power_pip_percentage, learned_spells)
         self.learned_spells.append('Imp')
-    class_type = 'Life'
 
 class Balance(Character):
     def __init__(self, name, max_health, max_mana, deck, power_pip_percentage, learned_spells):
-        super().__init__(name, max_health, max_mana, deck, power_pip_percentage, learned_spells)
+        super().__init__(name, 'Balance', max_health, max_mana, deck, power_pip_percentage, learned_spells)
         self.learned_spells.append('Scarab')
-    class_type = 'Balance'
+
+
 # class Party:
 #     def __init__(self):
 #         self.characters = []
