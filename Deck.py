@@ -62,7 +62,7 @@ class Deck:
 
     def discard_card(self, card):
         if card in self.current_hand:
-            self.current_hand.remove(card)
+            #self.current_hand.remove(card)
             self.discard_pile.append(card)
             # Draw card after discarding a card
             self.draw_cards(1)
@@ -87,8 +87,22 @@ class Deck:
         # Draw a new hand
         self.draw_cards(self.HAND_SIZE)
 
-    def count_cards(self, card):
-        return sum(1 for c in self.cards if c == card)
+    def update_hand(player):
+        """Remove cards from the player's hand if they have been used up."""
+
+        # Loop over the cards in the player's hand in reverse order
+        # We loop in reverse so that we can remove cards while iterating
+        for i in reversed(range(len(player.hand))):
+            # Check if the player has any of this card left in their deck
+            if player.hand[i].count_in_deck == 0:
+                # If not, remove it from their hand
+                del player.hand[i]
+
+
+    def count_cards(self, card_name):
+        return sum(1 for c in self.cards if c == card_name)
+
+
 
     def shuffle(self):
         print("Shuffling deck...")

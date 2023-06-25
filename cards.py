@@ -60,7 +60,7 @@ class Spell(Card):
     def apply_effect(self, caster, target=None, boosted_damage=None):
         damage = self.damage
         if self.school in caster.damage_boosts:
-            damage += damage * caster.damage_boosts[self.school] / 100
+            #damage += damage * caster.damage_boosts[self.school] * 100#/ 100
             caster.use_damage_boost(self.school, damage)  # Use the damage boost
         target.take_damage(damage)  # Apply damage to the target
 
@@ -278,7 +278,7 @@ storm_blade = Blade(name="Storm Blade",
                     image_path="images/(Spell)_Stormblade)",
                     school="Storm",
                     cost=0,
-                    damage_boost=0.30,
+                    damage_boost=30, # +30%
                     #effect=Blade.effect,
                     accuracy=1)
 
@@ -286,7 +286,7 @@ fire_blade = Blade(name="Fire Blade",
                    image_path="images/(Spell)_Fireblade.png",
                    school="Fire",
                    cost=0,
-                   damage_boost=0.35,
+                   damage_boost=35,
                    #effect=Blade.effect,
                    accuracy=1)
 
@@ -294,7 +294,7 @@ ice_blade = Blade(name="Ice Blade",
                   image_path="images/(Spell)_Iceblade",
                   school="Ice",
                   cost=0,
-                  damage_boost=0.35,
+                  damage_boost=35,
                   #effect=Blade.effect,
                   accuracy=1)
 
@@ -302,7 +302,7 @@ life_blade = Blade(name="Life Blade",
                   image_path="images/(Spell)_Lifeblade",
                   school="Life",
                   cost=0,
-                  damage_boost=0.35,
+                  damage_boost=35,
                   #effect=Blade.effect,
                   accuracy=1)
 
@@ -310,7 +310,7 @@ myth_blade = Blade(name="Myth Blade",
                   image_path="images/(Spell)_Myth",
                   school="Myth",
                   cost=0,
-                  damage_boost=0.35,
+                  damage_boost=35,
                   #effect=Blade.effect,
                   accuracy=1)
 
@@ -318,7 +318,7 @@ death_blade = Blade(name="Death Blade",
                   image_path="images/(Spell)_Deathblade",
                   school="Death",
                   cost=0,
-                  damage_boost=0.35,
+                  damage_boost=35,
                   #effect=Blade.effect,
                   accuracy=1)
 
@@ -381,6 +381,12 @@ card_instances = {
 }
 
 def get_card(card_name):
-    return card_instances.get(card_name)
+    card = card_instances.get(card_name)
+
+    # Raise an exception if the card name was not found
+    if card is None:
+        raise ValueError(f"No card found with the name '{card_name}'")
+
+    return card
 
 

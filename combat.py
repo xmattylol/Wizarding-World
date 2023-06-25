@@ -37,7 +37,22 @@ class Combat:
         self.enemy.pips += 1
         self.current_turn = self.player
 
+    def update_hand(self):
+        """Remove cards from the player's hand if they have been used up."""
+        # Loop over the cards in the player's hand in reverse order
+        # We loop in reverse so that we can remove cards while iterating
+        for i in reversed(range(len(self.player.hand))):
+            # Check if the player has any of this card left in their deck
+            card_name = self.player.hand[i]
+            card = get_card(card_name)
+            if self.player.deck.count_cards(card.name) == 0:
+                # If not, remove it from their hand
+                del self.player.hand[i]
+
+
     def player_turn(self):
+        self.update_hand()
+
         print()
         print(self.player)
         print(self.enemy)
