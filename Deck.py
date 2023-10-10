@@ -65,7 +65,7 @@ class Deck:
             #self.current_hand.remove(card)
             self.discard_pile.append(card)
             # Draw card after discarding a card
-            self.draw_cards(1)
+            #self.draw_cards(1)
             return True
         return False
 

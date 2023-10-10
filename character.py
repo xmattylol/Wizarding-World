@@ -110,8 +110,8 @@ class Character:
                 print(f"{self.name} does not have enough pips to use {card.name}.")
 
 
-    def discard_card(self, card):
-        self.deck.append(card)
+    #def discard_card(self, card):
+       # self.deck.append(card)
 
     def generate_power_pip(self):
         return random.random(0, 1) < self.power_pip_percentage

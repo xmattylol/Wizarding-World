@@ -1,0 +1,14 @@
+discard
+treasure cards
+deck editing
+deck swapping
+gear
+gear swapping
+drops for mobs
+add fleeing
+add shops
+add npcs
+add trainers
+add leveling
+add level scaling
+unlock cards with level
