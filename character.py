@@ -138,9 +138,19 @@ class Character:
         """Move the character by dx and dy."""
         if dx != 0 or dy != 0:
             self.animation.play()  # Ensure the animation plays while moving
-            print("Animation should play.")  # Add this print statement
+
+            # Implement the directions
+            if dx > 0:  # Moving right
+                self.animation.set_direction('right')
+            elif dx < 0:  # Moving left
+                self.animation.set_direction('left')
+            elif dy > 0:  # Moving down
+                self.animation.set_direction('down')
+            elif dy < 0:  # Moving up
+                self.animation.set_direction('up')
         else:
             self.animation.stop()  # Consider stopping or resetting animation when not moving
+
         self.rect.x += dx
         self.rect.y += dy
 

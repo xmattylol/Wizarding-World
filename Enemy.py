@@ -1,9 +1,10 @@
 import random
 import cards
 from cards import *
+from Animation import Animation
 
 class Enemy:
-    def __init__(self, name, max_health, attack_power, deck, class_type):
+    def __init__(self, name, max_health, attack_power, deck, class_type, sprite_sheet_path, sprite_size, num_frames):
         self.name = name
         self.max_health = max_health
         self.health = max_health
@@ -13,6 +14,16 @@ class Enemy:
         self.hand = deck.current_hand
         self.pips = 0
 
+        # Animation attributes
+        self.sprite_sheet_path = sprite_sheet_path
+        self.sprite_size = sprite_size
+        self.num_frames = num_frames
+        self.animation = Animation(
+            sprite_sheet_path=self.sprite_sheet_path,
+            sprite_size=self.sprite_size,
+            num_frames=self.num_frames,
+            loop=True
+        )
 
         self.damage_boosts = {
             'Storm': 0,
@@ -55,6 +66,15 @@ class Enemy:
         health_text = font.render("Health: {}/{}".format(self.health, self.max_health), True, (255, 255, 255))
         health_pos = (20, 20)
         screen.blit(health_text, health_pos)
+
+    def display(self, screen, position):
+        """ Display the enemy on the screen with the current frame of the animation """
+        self.animation.draw(screen, position)
+
+    def update_animation(self, dt):
+        """ Update the animation frame as per the delta time """
+        self.animation.update(dt)
+
 
     def choose_card(self, available_pips):
         valid_card_names = [card_name for card_name in self.hand if

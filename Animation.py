@@ -1,4 +1,6 @@
 import pygame
+import warnings
+
 
 class Animation:
     def __init__(self, sprite_sheet_path, sprite_size, num_frames, frame_durations=None, loop=True, end_callback=None):
@@ -8,31 +10,36 @@ class Animation:
         self.frame_durations = frame_durations if frame_durations else [100] * num_frames
         self.loop = loop
         self.end_callback = end_callback
-        self.frames = self.load_frames()
         self.current_frame = 0
         self.current_frame_duration = self.frame_durations[self.current_frame]
         self.last_update_time = 0
         self.is_playing = False
         self.is_paused = False
-        assert len(self.frames) == self.num_frames, "Mismatched frame count!"
 
+        self.frames = self.load_frames()  # Just load the frames once, directions are handled with flipping
+        self.flip = False  # Add a flag to know whether to flip image horizontally
 
     def load_frames(self):
         frames = []
-        sheet_width, sheet_height = self.sprite_sheet.get_size()
         for i in range(self.num_frames):
             frame_left = i * self.sprite_size[0]
-            if frame_left + self.sprite_size[0] > sheet_width or self.sprite_size[1] > sheet_height:
-                raise ValueError(
-                    f"Frame {i} is outside of sprite sheet bounds! Sprite size might be too large or num_frames too high.")
-
-            frame = self.sprite_sheet.subsurface((frame_left, 0, *self.sprite_size))
-            frame = pygame.transform.scale(frame, (self.sprite_size[0] * 4, self.sprite_size[1] * 4))  # Upscaling here
+            frame_top = 0  # Only one row is considered, adjust if needed
+            frame = self.sprite_sheet.subsurface((frame_left, frame_top, *self.sprite_size))
+            frame = pygame.transform.scale(frame, (self.sprite_size[0] * 4, self.sprite_size[1] * 4))  # Upscaling
             frames.append(frame)
         return frames
 
+    def set_frame_durations(self, new_durations):
+        if len(new_durations) == self.num_frames:
+            self.frame_durations = new_durations
+        else:
+            print(f"Error: Expected {self.num_frames} durations, but got {len(new_durations)}")
+
     def draw(self, screen, position):
-        screen.blit(self.get_current_frame(), position)
+        frame = self.get_current_frame()
+        if self.flip:  # Flip the frame if self.flip is True
+            frame = pygame.transform.flip(frame, True, False)
+        screen.blit(frame, position)
 
     def play(self):
         self.is_playing = True
@@ -64,14 +71,17 @@ class Animation:
                 self.current_frame_duration = self.frame_durations[self.current_frame]
                 print(f"Frame Updated to: {self.current_frame}")
 
-
     def get_current_frame(self):
-        try:
-            return self.frames[self.current_frame]
-        except IndexError:
-            print(
-                f"Error: Trying to access frame {self.current_frame}, but only {len(self.frames)} frames are available.")
-            return self.frames[0]  # Return the first frame or a placeholder to avoid crash
+        return self.frames[self.current_frame]
+
+    def set_direction(self, new_direction):
+        # Simplify to just handle flipping, not changing frame sets
+        if new_direction == 'left':
+            self.flip = True
+        elif new_direction == 'right':
+            self.flip = False
+        else:
+            warnings.warn(f"Invalid direction: {new_direction}.")
 
     def pause(self):
         if self.is_playing and not self.is_paused:

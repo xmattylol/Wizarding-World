@@ -23,11 +23,12 @@
 # #
 #
 import pygame
+
 from pygame.locals import *
 import sys
 from character import *
 import Deck
-
+from Enemy import *
 # Initialize Pygame
 pygame.init()
 
@@ -48,7 +49,7 @@ WHITE = (255, 255, 255)
 # Instance of player
 player = Character(
     name="Necromancer",
-    class_type="Wizard",
+    class_type="Death",
     max_health=100,
     max_mana=100,
     deck=Deck.starter_deck, # You might pass a proper deck object here
@@ -59,9 +60,23 @@ player = Character(
     num_frames=4  # Assume there are 4 frames in the sprite_sheet
 )
 
+golem = Enemy(
+    name="Golem",
+    max_health=100,
+    attack_power=1,
+    deck=Deck.golem_deck,
+    class_type="Myth",
+    sprite_sheet_path="images/SoliderAutomatonIdleSide.png",
+    sprite_size=(16, 16),  # Example size, adjust accordingly
+    num_frames=4  # Example frame number, adjust according to your spritesheet
+)
+golem.animation.play()  # Starting the animation
+
+
 # Main game loop
 running = True
 while running:
+    dt = clock.tick(60) / 1000  # Amount of seconds between each loop
     for event in pygame.event.get():
         if event.type == QUIT:
             running = False
@@ -72,20 +87,26 @@ while running:
         running = False
     if keys[pygame.K_LEFT] or keys[pygame.K_a]:
         player.move(-player.speed, 0)
+        player.animation.set_direction('left')
     if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
         player.move(player.speed, 0)
+        player.animation.set_direction('right')
     if keys[pygame.K_UP] or keys[pygame.K_w]:
         player.move(0, -player.speed)
     if keys[pygame.K_DOWN] or keys[pygame.K_s]:
         player.move(0, player.speed)
 
     # Update
-    dt = clock.tick(60)  # Delta time in milliseconds
-    player.update(dt/1000.0)  # Pass elapsed time in seconds to handle animations
+    player.update(dt)  # Pass elapsed time in seconds to handle animations
 
     # Draw/render
     WIN.fill(WHITE)  # Filling screen with white color
     player.draw(WIN)  # Draw player on the window at position (100, 100)
+
+    golem.update_animation(dt)  # Update golem animation
+    golem.display(WIN, (400, 300))  # Display golem at x=400, y=300
+    golem.animation.set_frame_durations([150, 150, 150, 150])
+    golem.animation.set_direction('left')
 
     pygame.display.flip()  # Updating the screen
 
