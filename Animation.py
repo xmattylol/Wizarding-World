@@ -13,6 +13,7 @@ class Animation:
         self.current_frame_duration = self.frame_durations[self.current_frame]
         self.last_update_time = 0
         self.is_playing = False
+        self.is_paused = False
         assert len(self.frames) == self.num_frames, "Mismatched frame count!"
 
 
@@ -71,5 +72,25 @@ class Animation:
             print(
                 f"Error: Trying to access frame {self.current_frame}, but only {len(self.frames)} frames are available.")
             return self.frames[0]  # Return the first frame or a placeholder to avoid crash
+
+    def pause(self):
+        if self.is_playing and not self.is_paused:
+            self.is_paused = True
+            self.is_playing = False
+
+    def resume(self):
+        if not self.is_playing and self.is_paused:
+            self.is_playing = True
+            self.is_paused = False
+
+    def play_from_start(self):
+        self.reset()
+        self.play()
+
+    def set_frame(self, frame_index):
+        if 0 <= frame_index < self.num_frames:
+            self.current_frame = frame_index
+        else:
+            print(f"Error: Frame {frame_index} does not exist.")
 
 
