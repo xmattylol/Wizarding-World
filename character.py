@@ -1,10 +1,11 @@
 import random
-#import main
+
+from Animation import *
 from cards import *
 
 
 class Character:
-    def __init__(self, name, class_type, max_health, max_mana, deck, power_pip_percentage, learned_spells):
+    def __init__(self, name, class_type, max_health, max_mana, deck, power_pip_percentage, learned_spells, sprite_sheet, sprite_size, num_frames):
         self.name = name
         self.class_type = class_type
         self.max_health = max_health
@@ -16,6 +17,11 @@ class Character:
         self.pips = 0
         self.power_pip_percentage = power_pip_percentage
         self.learned_spells = learned_spells
+        # Animation
+        # Note: You would replace these parameter values as needed
+        self.animation = Animation(sprite_sheet, sprite_size, num_frames, [200] * num_frames, loop=True)
+        self.rect = pygame.Rect(100, 100, sprite_size[0] * 4, sprite_size[1] * 4)
+        self.speed = 5
 
         self.damage_boosts = {
             'Storm': 0,
@@ -65,21 +71,6 @@ class Character:
     def is_defeated(self):
         return self.health == 0
 
-    # def play_card(self, card, target):
-    #     card_cost = card.get_cost()
-    #     if self.pips >= card_cost:
-    #         self.pips -= card_cost
-    #         self.mana -= card_cost
-    #         print(f"Card played: {card.name}")
-    #         print(f"{self.name} used {card.name} and dealt {card.damage} damage!")
-    #         card.effect(target, card.damage)  # Pass the card's damage to the effect
-    #         self.deck.discard_card(card)  # Discard the played card
-    #         self.hand.remove(card.name)  # Remove the played card from the hand
-    #         new_card = self.deck.draw()  # Draw a new card
-    #         if new_card:
-    #             self.hand.append(new_card)  # Add the new card to the hand
-    #     else:
-    #         print("Not enough pips to play this card!")
     def play_card(self, card, combat_instance):
         card_cost = card.get_cost()
         if self.pips >= card_cost:
@@ -129,6 +120,29 @@ class Character:
         info = "Name: {}\nClass: {}\nHealth: {}/{}\nMana: {}/{}\n".format(
             self.name, self.class_type, self.health, self.max_health, self.mana, self.max_mana)
         return info
+
+    def update(self, dt):
+        # Update animation
+        self.animation.update(dt)
+
+        # Check for player's stop state (e.g., no key presses)
+        keys = pygame.key.get_pressed()
+        if not (keys[pygame.K_LEFT] or keys[pygame.K_a] or keys[pygame.K_RIGHT] or keys[pygame.K_d] or keys[
+            pygame.K_UP] or keys[pygame.K_w] or keys[pygame.K_DOWN] or keys[pygame.K_s]):
+            self.animation.stop()
+
+    def draw(self, screen):
+        self.animation.draw(screen, self.rect.topleft)
+
+    def move(self, dx, dy):
+        """Move the character by dx and dy."""
+        if dx != 0 or dy != 0:
+            self.animation.play()  # Ensure the animation plays while moving
+            print("Animation should play.")  # Add this print statement
+        else:
+            self.animation.stop()  # Consider stopping or resetting animation when not moving
+        self.rect.x += dx
+        self.rect.y += dy
 
     # def display_stats(self, screen, font):
     #     # Display character health

@@ -22,19 +22,78 @@
 # #
 # #
 #
-# import pygame
-# from pygame.locals import *
-# import sys
-#
-# pygame.init()
-#
-# screen_width = 800
-# screen_height = 600
-# screen = pygame.display.set_mode((screen_width, screen_height))
-# pygame.display.set_caption("My Wizard101-Inspired Card Game")
-#
-# # Define the clock object
-# clock = pygame.time.Clock()
+import pygame
+from pygame.locals import *
+import sys
+from character import *
+import Deck
+
+# Initialize Pygame
+pygame.init()
+
+# Screen dimensions
+screen_width = 800
+screen_height = 600
+
+# Window Setup
+WIN = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("My Wizard101-Inspired Card Game")
+
+# Clock object
+clock = pygame.time.Clock()
+
+# Colors
+WHITE = (255, 255, 255)
+
+# Instance of player
+player = Character(
+    name="Necromancer",
+    class_type="Wizard",
+    max_health=100,
+    max_mana=100,
+    deck=Deck.starter_deck, # You might pass a proper deck object here
+    power_pip_percentage=0.1,
+    learned_spells=[],
+    sprite_sheet="images/AdeptNecromancerIdle.png",  # Providing the path from the "images" folder
+    sprite_size=(16, 16),  # Assume each frame is 16 pixels
+    num_frames=4  # Assume there are 4 frames in the sprite_sheet
+)
+
+# Main game loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            running = False
+
+    keys = pygame.key.get_pressed()
+
+    if keys[K_ESCAPE]:
+        running = False
+    if keys[pygame.K_LEFT] or keys[pygame.K_a]:
+        player.move(-player.speed, 0)
+    if keys[pygame.K_RIGHT] or keys[pygame.K_d]:
+        player.move(player.speed, 0)
+    if keys[pygame.K_UP] or keys[pygame.K_w]:
+        player.move(0, -player.speed)
+    if keys[pygame.K_DOWN] or keys[pygame.K_s]:
+        player.move(0, player.speed)
+
+    # Update
+    dt = clock.tick(60)  # Delta time in milliseconds
+    player.update(dt/1000.0)  # Pass elapsed time in seconds to handle animations
+
+    # Draw/render
+    WIN.fill(WHITE)  # Filling screen with white color
+    player.draw(WIN)  # Draw player on the window at position (100, 100)
+
+    pygame.display.flip()  # Updating the screen
+
+# Clean up
+pygame.quit()
+sys.exit()
+
+
 #
 #
 # def main_menu(screen):
@@ -213,3 +272,6 @@
 #         screen.blit(selected_text, selected_pos)
 #         pygame.display.update()
 #         clock.tick(60)
+
+
+
