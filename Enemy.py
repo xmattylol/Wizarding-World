@@ -2,6 +2,7 @@ import random
 import cards
 from cards import *
 from Animation import Animation
+import pygame
 
 class Enemy:
     def __init__(self, name, max_health, attack_power, deck, class_type, sprite_sheet_path, sprite_size, num_frames):
@@ -24,6 +25,8 @@ class Enemy:
             num_frames=self.num_frames,
             loop=True
         )
+
+        self.rect = pygame.Rect(0, 0, sprite_size[0], sprite_size[1])  # position will be updated later
 
         self.damage_boosts = {
             'Storm': 0,
@@ -75,6 +78,8 @@ class Enemy:
         """ Update the animation frame as per the delta time """
         self.animation.update(dt)
 
+    def set_position(self, x, y):
+        self.rect.topleft = (x, y)
 
     def choose_card(self, available_pips):
         valid_card_names = [card_name for card_name in self.hand if

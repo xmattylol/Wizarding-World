@@ -69,7 +69,7 @@ class Animation:
                         return  # Exit the method after stopping animation to avoid possible index error
 
                 self.current_frame_duration = self.frame_durations[self.current_frame]
-                print(f"Frame Updated to: {self.current_frame}")
+                #print(f"Frame Updated to: {self.current_frame}")
 
     def get_current_frame(self):
         return self.frames[self.current_frame]

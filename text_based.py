@@ -32,6 +32,7 @@ def class_menu():
         selected_class = class_options[choice]
         print(f"Selected {selected_class}")
         tutorial(selected_class)
+        return selected_class
     else:
         print("Invalid choice. Try again.")
         class_menu()
@@ -49,13 +50,13 @@ def tutorial(selected_class):
         'Balance': Balance
     }
 
-    player_class = class_dict[selected_class]
-    player = player_class(name="Player", max_health=1500, max_mana=50,
-                       deck=fire_deck, power_pip_percentage=0.5, learned_spells=[])
-    golem = Enemy("Golem", 1000, 0.5, golem_deck, "Myth")
-
-    combat = Combat(player, golem)
-    combat.start()
+    # player_class = class_dict[selected_class]
+    # player = player_class(name="Player", max_health=1500, max_mana=50,
+    #                    deck=fire_deck, power_pip_percentage=0.5, learned_spells=[])
+    # golem = Enemy("Golem", 1000, 0.5, golem_deck, "Myth")
+    #
+    # combat = Combat(player, golem)
+    # combat.start()
 
     print("Tutorial complete!")
 
@@ -64,4 +65,5 @@ def new_game():
     print("New game starting...")
     class_menu()
 
-main_menu()
+if __name__ == "__main__":
+    main_menu()

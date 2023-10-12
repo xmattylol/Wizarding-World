@@ -1,27 +1,27 @@
-# #
-# # TODO: Card types: Spell, Item, Treasure, pet, minion, blade, trap, aura, (maybe shadow)
-# #
-# # TODO: Character classes: Storm, Fire, Ice, Death, Life, Myth, Balance
-# #
-# # TODO: Combat Rules: turn-based and involve playing cards from
-# # a player's hand to deal damage or other effects to enemies.
-# # include rules for blocking enemy attacks, dodging attacks,
-# # and using card effects to heal or buff allies.
-# #
-# # TODO: Leveling Up: As players progress through the game and win battles,
-# # they earn XP that allow them to level up their characters.
-# # Leveling up could provide players with new cards, abilities, and bonuses to their stats.
-# #
-# # TODO: Quests: include quests for players to complete that involve battling enemies
-# # and collecting items. Completing quests could provide players with rewards like new cards, or experience points.
-# #
-# # TODO: Customizable Decks: Players could build their own decks from a pool of available cards.
-# # They could also customize their decks between battles to optimize their strategy based on their opponents.
-# #
-# #
-# #
-# #
 #
+# TODO: Card types: Spell, Item, Treasure, pet, minion, blade, trap, aura, (maybe shadow)
+#
+# TODO: Character classes: Storm, Fire, Ice, Death, Life, Myth, Balance
+#
+# TODO: Combat Rules: turn-based and involve playing cards from
+# a player's hand to deal damage or other effects to enemies.
+# include rules for blocking enemy attacks, dodging attacks,
+# and using card effects to heal or buff allies.
+#
+# TODO: Leveling Up: As players progress through the game and win battles,
+# they earn XP that allow them to level up their characters.
+# Leveling up could provide players with new cards, abilities, and bonuses to their stats.
+#
+# TODO: Quests: include quests for players to complete that involve battling enemies
+# and collecting items. Completing quests could provide players with rewards like new cards, or experience points.
+#
+# TODO: Customizable Decks: Players could build their own decks from a pool of available cards.
+# They could also customize their decks between battles to optimize their strategy based on their opponents.
+#
+#
+#
+#
+
 import pygame
 
 from pygame.locals import *
@@ -29,6 +29,10 @@ import sys
 from character import *
 import Deck
 from Enemy import *
+from EnemyManager import *
+import text_based
+from combat import *
+
 # Initialize Pygame
 pygame.init()
 
@@ -47,9 +51,11 @@ clock = pygame.time.Clock()
 WHITE = (255, 255, 255)
 
 # Instance of player
+selected_class = text_based.class_menu()  # Get the selected class before starting the game loop
+
 player = Character(
     name="Necromancer",
-    class_type="Death",
+    class_type=selected_class,
     max_health=100,
     max_mana=100,
     deck=Deck.starter_deck, # You might pass a proper deck object here
@@ -59,19 +65,22 @@ player = Character(
     sprite_size=(16, 16),  # Assume each frame is 16 pixels
     num_frames=4  # Assume there are 4 frames in the sprite_sheet
 )
+enemy_manager = EnemyManager(WIN, EnemyManager.enemy_templates)
 
-golem = Enemy(
-    name="Golem",
-    max_health=100,
-    attack_power=1,
-    deck=Deck.golem_deck,
-    class_type="Myth",
-    sprite_sheet_path="images/SoliderAutomatonIdleSide.png",
-    sprite_size=(16, 16),  # Example size, adjust accordingly
-    num_frames=4  # Example frame number, adjust according to your spritesheet
-)
-golem.animation.play()  # Starting the animation
+# golem = Enemy(
+#     name="Golem",
+#     max_health=100,
+#     attack_power=1,
+#     deck=Deck.golem_deck,
+#     class_type="Myth",
+#     sprite_sheet_path="images/SoliderAutomatonIdleSide.png",
+#     sprite_size=(16, 16),  # Example size, adjust accordingly
+#     num_frames=4  # Example frame number, adjust according to your spritesheet
+# )
 
+#golem.animation.play()  # Starting the animation
+enemy_manager.spawn_enemy('golem', x=100, y=200)
+enemy_manager.spawn_enemy('golem', x=300, y=400)
 
 # Main game loop
 running = True
@@ -96,6 +105,12 @@ while running:
     if keys[pygame.K_DOWN] or keys[pygame.K_s]:
         player.move(0, player.speed)
 
+    for enemy in enemy_manager.get_active_enemies():
+        if player.rect.colliderect(enemy.rect):
+            print("Combat initiated!")
+            combat = Combat(player, enemy)  # Pass the specific enemy instance to Combat
+            combat.start()
+
     # Update
     player.update(dt)  # Pass elapsed time in seconds to handle animations
 
@@ -103,11 +118,13 @@ while running:
     WIN.fill(WHITE)  # Filling screen with white color
     player.draw(WIN)  # Draw player on the window at position (100, 100)
 
-    golem.update_animation(dt)  # Update golem animation
-    golem.display(WIN, (400, 300))  # Display golem at x=400, y=300
-    golem.animation.set_frame_durations([150, 150, 150, 150])
-    golem.animation.set_direction('left')
+    # golem.update_animation(dt)  # Update golem animation
+    # golem.display(WIN, (400, 300))  # Display golem at x=400, y=300
+    # golem.animation.set_frame_durations([150, 150, 150, 150])
+    # golem.animation.set_direction('left')
 
+    enemy_manager.update_animation(dt)
+    enemy_manager.display_enemies()
     pygame.display.flip()  # Updating the screen
 
 # Clean up
