@@ -20,6 +20,7 @@ class EnemyManager:
             sprite_sheet_path=template['sprite_sheet_path'],
             sprite_size=template['sprite_size'],
             num_frames=template['num_frames'],
+            frame_durations=template['frame_durations']
         )
         new_enemy.set_position(x, y)
         self.enemies.append(new_enemy)
@@ -50,6 +51,7 @@ class EnemyManager:
             'sprite_sheet_path': 'images/SoliderAutomatonIdleSide.png',
             'sprite_size': (16, 16),
             'num_frames': 4,
+            'frame_durations': [500, 500, 250, 500]
         },
         # ... additional enemy templates
     }

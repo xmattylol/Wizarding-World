@@ -106,6 +106,8 @@ while running:
         player.move(0, player.speed)
 
     for enemy in enemy_manager.get_active_enemies():
+        enemy.animation.play()
+
         if player.rect.colliderect(enemy.rect):
             print("Combat initiated!")
             combat = Combat(player, enemy)  # Pass the specific enemy instance to Combat
@@ -113,6 +115,7 @@ while running:
 
     # Update
     player.update(dt)  # Pass elapsed time in seconds to handle animations
+    enemy_manager.update_animation(dt)
 
     # Draw/render
     WIN.fill(WHITE)  # Filling screen with white color
@@ -123,7 +126,6 @@ while running:
     # golem.animation.set_frame_durations([150, 150, 150, 150])
     # golem.animation.set_direction('left')
 
-    enemy_manager.update_animation(dt)
     enemy_manager.display_enemies()
     pygame.display.flip()  # Updating the screen
 

@@ -5,7 +5,7 @@ from Animation import Animation
 import pygame
 
 class Enemy:
-    def __init__(self, name, max_health, attack_power, deck, class_type, sprite_sheet_path, sprite_size, num_frames):
+    def __init__(self, name, max_health, attack_power, deck, class_type, sprite_sheet_path, sprite_size, num_frames, frame_durations=None):
         self.name = name
         self.max_health = max_health
         self.health = max_health
@@ -23,6 +23,7 @@ class Enemy:
             sprite_sheet_path=self.sprite_sheet_path,
             sprite_size=self.sprite_size,
             num_frames=self.num_frames,
+            frame_durations=frame_durations,
             loop=True
         )
 
