@@ -69,7 +69,7 @@ class Character:
         #random.shuffle(self.deck)
 
     def is_defeated(self):
-        return self.health == 0
+        return self.health <= 0
 
     def play_card(self, card, combat_instance):
         card_cost = card.get_cost()

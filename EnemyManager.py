@@ -30,11 +30,13 @@ class EnemyManager:
 
     def update_animation(self, dt):
         for enemy in self.enemies:
-            enemy.update_animation(dt)
+            if not enemy.is_defeated():
+                enemy.update_animation(dt)
 
     def display_enemies(self):
         for enemy in self.enemies:
-            enemy.display(self.screen, enemy.rect.topleft)
+            if not enemy.is_defeated():
+                enemy.display(self.screen, enemy.rect.topleft)
 
     def get_active_enemies(self):
         """Get a list of all enemies that have not been defeated"""
