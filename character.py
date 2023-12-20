@@ -101,8 +101,22 @@ class Character:
                 print(f"{self.name} does not have enough pips to use {card.name}.")
 
 
-    #def discard_card(self, card):
-       # self.deck.append(card)
+    def discard_card(self, card_name):
+        """Discards a card from the character's hand."""
+        if card_name in self.hand:
+            self.hand.remove(card_name)  # Remove the card from the hand
+            self.deck.discard_pile.append(card_name)  # Add the card to the discard pile
+            print(f"Discarded card: {card_name}")
+        else:
+            print(f"Card '{card_name}' not found in hand.")
+
+    def draw_up_to_seven_cards(self):
+        while len(self.hand) < 7:
+            new_card = self.deck.draw()
+            if new_card:
+                self.hand.append(new_card)
+            else:
+                break  # Break if no more cards can be drawn
 
     def generate_power_pip(self):
         return random.random(0, 1) < self.power_pip_percentage

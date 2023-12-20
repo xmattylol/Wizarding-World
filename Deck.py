@@ -146,11 +146,11 @@ def create_deck(deck_data, max_size, max_copies):
 
 starter_deck_data = {
     'fire_cat': 3,
-    'sunbird': 1,
-    'frost_beetle': 1,
-    'thunder_snake': 2,
-    'lightning_bats': 1,
-    'storm_shark': 1,
+    'sunbird': 2,
+    'frost_beetle': 2,
+    'thunder_snake': 3,
+    'lightning_bats': 2,
+    'storm_shark': 2,
     'tempest': 1,
 
 }

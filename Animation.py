@@ -67,9 +67,9 @@ class Animation:
                         if self.end_callback:
                             self.end_callback()
                         return  # Exit the method after stopping animation to avoid possible index error
-                    print(f"Updating animation frame to: {self.current_frame}")  # Debug print
+                    #print(f"Updating animation frame to: {self.current_frame}")  # Debug print
                 self.current_frame_duration = self.frame_durations[self.current_frame]
-                print(f"Frame Updated to: {self.current_frame}")
+                #print(f"Frame Updated to: {self.current_frame}")
 
 
     def get_current_frame(self):

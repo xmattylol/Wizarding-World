@@ -51,9 +51,10 @@ class Combat:
 
 
     def player_turn(self):
-        self.update_hand()
+        #self.update_hand()
+        self.player.draw_up_to_seven_cards()
 
-        print()
+        print("----------------------------")
         print(self.player)
         print(self.enemy)
         print("Your turn:")
@@ -65,30 +66,34 @@ class Combat:
 
         card_to_play = None
         while card_to_play is None:
-            user_input = input("Enter the number of the card you want to play or 'pass': ")
+            user_input = input("Enter the number of the card you want to play, 'discard', or 'pass': ")
             if user_input.lower() == "pass":
                 print("You chose to pass your turn.")
                 self.current_turn = self.enemy
                 break
-
-            card_choice = int(user_input) - 1
-            if 0 <= card_choice < len(self.player.hand):
-                card_name_to_play = self.player.hand[card_choice]
-                card_to_play = get_card(card_name_to_play)
-                if self.player.deck.count_cards(card_to_play.name) > 0:  # Check if the card is still available in the deck
-                    if self.player.pips >= card_to_play.cost:
-                        self.target = self.enemy  # Sets the players target to the enemy | Needs updating for multiple enemies
-                        self.player.play_card(card_to_play, self)
-                        self.current_turn = self.enemy
+            elif user_input.lower() == 'discard':
+                self.discard_card_prompt()
+                continue
+            try:
+                card_choice = int(user_input) - 1
+                if 0 <= card_choice < len(self.player.hand):
+                    card_name_to_play = self.player.hand[card_choice]
+                    card_to_play = get_card(card_name_to_play)
+                    if self.player.deck.count_cards(card_to_play.name) > 0:  # Check if the card is still available in the deck
+                        if self.player.pips >= card_to_play.cost:
+                            self.target = self.enemy  # Sets the players target to the enemy | Needs updating for multiple enemies
+                            self.player.play_card(card_to_play, self)
+                            self.current_turn = self.enemy
+                        else:
+                            print(
+                                f"{card_to_play.name} costs {card_to_play.cost} pips, you have {self.player.pips} pips. Choose another card or pass.")
+                            card_to_play = None
                     else:
-                        print(
-                            f"{card_to_play.name} costs {card_to_play.cost} pips, you have {self.player.pips} pips. Choose another card or pass.")
+                        print(f"You have no more {card_to_play.name} cards in your deck.")
                         card_to_play = None
-                else:
-                    print(f"You have no more {card_to_play.name} cards in your deck.")
-                    card_to_play = None
-            else:
+            except ValueError:
                 print("Invalid card number. Choose a valid card or pass.")
+
 
     def enemy_turn(self):
         print("Enemy's turn.")
@@ -115,12 +120,27 @@ class Combat:
                 break
         self.current_turn = None  # This sets the start of the next round as the enemy's turn ends.
 
+    def discard_card_prompt(self):
+        print("\nSelect a card to discard:")
+        for idx, card_name in enumerate(self.player.hand):
+            card = get_card(card_name)
+            print(f"{idx + 1}. {card}")
 
 
-
-
-
-
+        while True:
+            discard_choice = input("Enter the number of the card to discard or 'cancel' to return: ")
+            if discard_choice.lower() == 'cancel':
+                break
+            discard_index = int(discard_choice) - 1
+            if 0 <= discard_index < len(self.player.hand):
+                card_name_to_discard = self.player.hand[discard_index]
+                self.player.discard_card(card_name_to_discard)  # Assuming this method only removes the card
+                for idx, card_name in enumerate(self.player.hand):
+                    card = get_card(card_name)
+                    print(f"{idx + 1}. {card}")
+                break
+            else:
+                print("Invalid choice. Please select a valid card number or 'cancel'.")
 
 # class Turn:
 #     def __init__(self, player):
