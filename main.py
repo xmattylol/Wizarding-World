@@ -17,8 +17,7 @@
 #
 # TODO: Customizable Decks: Players could build their own decks from a pool of available cards.
 # They could also customize their decks between battles to optimize their strategy based on their opponents.
-#
-#
+
 #
 #
 
@@ -26,11 +25,14 @@ import pygame
 
 from pygame.locals import *
 import sys
+
+import text_based
 from character import *
-import Deck
+from Deck import *
+from Deck import starter_deck
 from Enemy import *
 from EnemyManager import *
-import text_based
+from text_based import *
 from combat import *
 
 # Initialize Pygame
@@ -58,7 +60,7 @@ player = Character(
     class_type=selected_class,
     max_health=100,
     max_mana=100,
-    deck=Deck.starter_deck, # You might pass a proper deck object here
+    deck=starter_deck, # You might pass a proper deck object here
     power_pip_percentage=0.1,
     learned_spells=[],
     sprite_sheet="images/AdeptNecromancerIdle.png",  # Providing the path from the "images" folder
@@ -66,17 +68,6 @@ player = Character(
     num_frames=4  # Assume there are 4 frames in the sprite_sheet
 )
 enemy_manager = EnemyManager(WIN, EnemyManager.enemy_templates)
-
-# golem = Enemy(
-#     name="Golem",
-#     max_health=100,
-#     attack_power=1,
-#     deck=Deck.golem_deck,
-#     class_type="Myth",
-#     sprite_sheet_path="images/SoliderAutomatonIdleSide.png",
-#     sprite_size=(16, 16),  # Example size, adjust accordingly
-#     num_frames=4  # Example frame number, adjust according to your spritesheet
-# )
 
 #golem.animation.play()  # Starting the animation
 enemy_manager.spawn_enemy('golem', x=100, y=200)
