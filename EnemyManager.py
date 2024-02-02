@@ -33,11 +33,14 @@ class EnemyManager:
             if not enemy.is_defeated():
                 enemy.update_animation(dt)
 
-    def display_enemies(self):
+    def display_enemies(self, camera=None):
         for enemy in self.enemies:
             if not enemy.is_defeated():
-                enemy.display(self.screen, enemy.rect.topleft)
-
+                # Check if a camera is provided and adjust the enemy's position accordingly
+                if not enemy.is_defeated():
+                    #adjusted_rect = camera.apply(enemy.rect) if camera else enemy.rect
+                    enemy.display(self.screen, enemy.rect.topleft)
+                    #enemy.adjusted_rect = adjusted_rect  # Store for collision detection
     def get_active_enemies(self):
         """Get a list of all enemies that have not been defeated"""
         return [enemy for enemy in self.enemies if not enemy.is_defeated()]

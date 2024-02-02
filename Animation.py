@@ -25,7 +25,7 @@ class Animation:
             frame_left = i * self.sprite_size[0]
             frame_top = 0  # Only one row is considered, adjust if needed
             frame = self.sprite_sheet.subsurface((frame_left, frame_top, *self.sprite_size))
-            frame = pygame.transform.scale(frame, (self.sprite_size[0] * 4, self.sprite_size[1] * 4))  # Upscaling
+            #frame = pygame.transform.scale(frame, (self.sprite_size[0] * 4, self.sprite_size[1] * 4))  # Upscaling
             frames.append(frame)
         return frames
 
@@ -35,11 +35,17 @@ class Animation:
         else:
             print(f"Error: Expected {self.num_frames} durations, but got {len(new_durations)}")
 
-    def draw(self, screen, position):
+    def draw(self, screen, position, camera=None):
         frame = self.get_current_frame()
         if self.flip:  # Flip the frame if self.flip is True
             frame = pygame.transform.flip(frame, True, False)
-        screen.blit(frame, position)
+
+        if camera:
+            # Adjust the position for the camera
+            position = camera.apply(pygame.Rect(position, self.sprite_size))
+            screen.blit(frame, position.topleft)
+        else:
+            screen.blit(frame, position)
 
     def play(self):
         self.is_playing = True
@@ -67,10 +73,9 @@ class Animation:
                         if self.end_callback:
                             self.end_callback()
                         return  # Exit the method after stopping animation to avoid possible index error
-                    print(f"Updating animation frame to: {self.current_frame}")  # Debug print
+                    # print(f"Updating animation frame to: {self.current_frame}")  # Debug print
                 self.current_frame_duration = self.frame_durations[self.current_frame]
-                print(f"Frame Updated to: {self.current_frame}")
-
+                # print(f"Frame Updated to: {self.current_frame}")
 
     def get_current_frame(self):
         return self.frames[self.current_frame]

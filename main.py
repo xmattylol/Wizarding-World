@@ -17,21 +17,26 @@
 #
 # TODO: Customizable Decks: Players could build their own decks from a pool of available cards.
 # They could also customize their decks between battles to optimize their strategy based on their opponents.
-#
-#
+
 #
 #
 
 import pygame
 
-from pygame.locals import *
+#from pygame.locals import *
 import sys
+
+import text_based
 from character import *
-import Deck
+from Deck import *
+from Deck import starter_deck
 from Enemy import *
 from EnemyManager import *
-import text_based
+from text_based import *
 from combat import *
+from Animation import *
+import pytmx
+#from Camera import Camera
 
 # Initialize Pygame
 pygame.init()
@@ -42,7 +47,31 @@ screen_height = 600
 
 # Window Setup
 WIN = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("My Wizard101-Inspired Card Game")
+pygame.display.set_caption("Wizarding World")
+tmx_data = pytmx.load_pygame("data/tmx/testmap1.tmx")
+
+# Calculate the pixel dimensions of the map
+map_width = tmx_data.width * tmx_data.tilewidth
+map_height = tmx_data.height * tmx_data.tileheight
+
+# Initialize the camera with the map dimensions
+#camera = Camera(map_width, map_height)
+
+
+
+def draw_map(screen, tmx_data, tile_scale=1):
+    for layer in tmx_data.visible_layers:
+        if isinstance(layer, pytmx.TiledTileLayer):
+            for x, y, gid in layer:
+                tile = tmx_data.get_tile_image_by_gid(gid)
+                if tile:
+                    tile_rect = pygame.Rect(x * tmx_data.tilewidth, y * tmx_data.tileheight, tmx_data.tilewidth, tmx_data.tileheight)
+                    #tile_rect = camera.apply(tile_rect)
+                    if tile_scale != 1:
+                        tile = pygame.transform.scale(tile, (int(tile_rect.width * tile_scale), int(tile_rect.height * tile_scale)))
+                        tile_rect.size = tile.get_size()
+                    screen.blit(tile, tile_rect.topleft)
+
 
 # Clock object
 clock = pygame.time.Clock()
@@ -58,7 +87,7 @@ player = Character(
     class_type=selected_class,
     max_health=100,
     max_mana=100,
-    deck=Deck.starter_deck, # You might pass a proper deck object here
+    deck=starter_deck, # You might pass a proper deck object here
     power_pip_percentage=0.1,
     learned_spells=[],
     sprite_sheet="images/AdeptNecromancerIdle.png",  # Providing the path from the "images" folder
@@ -67,32 +96,21 @@ player = Character(
 )
 enemy_manager = EnemyManager(WIN, EnemyManager.enemy_templates)
 
-# golem = Enemy(
-#     name="Golem",
-#     max_health=100,
-#     attack_power=1,
-#     deck=Deck.golem_deck,
-#     class_type="Myth",
-#     sprite_sheet_path="images/SoliderAutomatonIdleSide.png",
-#     sprite_size=(16, 16),  # Example size, adjust accordingly
-#     num_frames=4  # Example frame number, adjust according to your spritesheet
-# )
-
 #golem.animation.play()  # Starting the animation
-enemy_manager.spawn_enemy('golem', x=100, y=200)
-enemy_manager.spawn_enemy('golem', x=300, y=400)
+enemy_manager.spawn_enemy('golem', x=200, y=200)
+enemy_manager.spawn_enemy('golem', x=250, y=400)
 
 # Main game loop
 running = True
 while running:
     dt = clock.tick(60) / 1000  # Amount of seconds between each loop
     for event in pygame.event.get():
-        if event.type == QUIT:
+        if event.type == pygame.QUIT:
             running = False
 
     keys = pygame.key.get_pressed()
 
-    if keys[K_ESCAPE]:
+    if keys[pygame.K_ESCAPE]:
         running = False
     if keys[pygame.K_LEFT] or keys[pygame.K_a]:
         player.move(-player.speed, 0)
@@ -115,11 +133,14 @@ while running:
 
     # Update
     player.update(dt)  # Pass elapsed time in seconds to handle animations
+    #camera.update(player)
+
     enemy_manager.update_animation(dt)
 
     # Draw/render
-    WIN.fill(WHITE)  # Filling screen with white color
-    player.draw(WIN)  # Draw player on the window at position (100, 100)
+    WIN.fill(WHITE)  # Clear the screen
+    draw_map(WIN, tmx_data)  # Draw the map with the camera applied
+    player.animation.draw(WIN, player.rect.topleft)
 
     # golem.update_animation(dt)  # Update golem animation
     # golem.display(WIN, (400, 300))  # Display golem at x=400, y=300
@@ -132,6 +153,10 @@ while running:
 # Clean up
 pygame.quit()
 sys.exit()
+
+
+
+
 
 
 #

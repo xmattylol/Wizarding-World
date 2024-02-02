@@ -28,6 +28,7 @@ class Enemy:
         )
 
         self.rect = pygame.Rect(0, 0, sprite_size[0], sprite_size[1])  # position will be updated later
+        #self.adjusted_rect = self.rect.copy()  # Initialize adjusted_rect
 
         self.damage_boosts = {
             'Storm': 0,

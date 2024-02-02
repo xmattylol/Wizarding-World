@@ -21,7 +21,7 @@ class Character:
         # Note: You would replace these parameter values as needed
         self.animation = Animation(sprite_sheet, sprite_size, num_frames, [200] * num_frames, loop=True)
         self.rect = pygame.Rect(100, 100, sprite_size[0] * 4, sprite_size[1] * 4)
-        self.speed = 5
+        self.speed = 1
 
         self.damage_boosts = {
             'Storm': 0,
@@ -59,14 +59,10 @@ class Character:
 
     def draw_card(self):
         return self.deck.draw()
-        # if len(self.deck) > 0:
-        #     return self.deck.pop(0)
-        # else:
-        #     return None
+
 
     def shuffle_deck(self):
         self.deck.shuffle()
-        #random.shuffle(self.deck)
 
     def is_defeated(self):
         return self.health <= 0
