@@ -36,7 +36,7 @@ from text_based import *
 from combat import *
 from Animation import *
 import pytmx
-#from Camera import Camera
+from Camera import Camera
 
 # Initialize Pygame
 pygame.init()
@@ -58,19 +58,19 @@ map_height = tmx_data.height * tmx_data.tileheight
 #camera = Camera(map_width, map_height)
 
 
-
-def draw_map(screen, tmx_data, tile_scale=1):
-    for layer in tmx_data.visible_layers:
-        if isinstance(layer, pytmx.TiledTileLayer):
-            for x, y, gid in layer:
-                tile = tmx_data.get_tile_image_by_gid(gid)
-                if tile:
-                    tile_rect = pygame.Rect(x * tmx_data.tilewidth, y * tmx_data.tileheight, tmx_data.tilewidth, tmx_data.tileheight)
-                    #tile_rect = camera.apply(tile_rect)
-                    if tile_scale != 1:
-                        tile = pygame.transform.scale(tile, (int(tile_rect.width * tile_scale), int(tile_rect.height * tile_scale)))
-                        tile_rect.size = tile.get_size()
-                    screen.blit(tile, tile_rect.topleft)
+#
+# def draw_map(screen, tmx_data, tile_scale=1):
+#     for layer in tmx_data.visible_layers:
+#         if isinstance(layer, pytmx.TiledTileLayer):
+#             for x, y, gid in layer:
+#                 tile = tmx_data.get_tile_image_by_gid(gid)
+#                 if tile:
+#                     tile_rect = pygame.Rect(2 * x * tmx_data.tilewidth, 2 * y * tmx_data.tileheight, 2 * tmx_data.tilewidth, 2 * tmx_data.tileheight)
+#                     #tile_rect = camera.apply(tile_rect)
+#                     if tile_scale != 1:
+#                         tile = pygame.transform.scale(tile, (int(tile_rect.width * tile_scale), int(tile_rect.height * tile_scale)))
+#                         tile_rect.size = tile.get_size()
+#                     screen.blit(tile, tile_rect.topleft)
 
 
 # Clock object
@@ -80,7 +80,7 @@ clock = pygame.time.Clock()
 WHITE = (255, 255, 255)
 
 # Instance of player
-selected_class = text_based.class_menu()  # Get the selected class before starting the game loop
+selected_class = text_based.class_menu(death=True)  # Get the selected class before starting the game loop
 
 player = Character(
     name="Necromancer",
@@ -99,6 +99,7 @@ enemy_manager = EnemyManager(WIN, EnemyManager.enemy_templates)
 #golem.animation.play()  # Starting the animation
 enemy_manager.spawn_enemy('golem', x=200, y=200)
 enemy_manager.spawn_enemy('golem', x=250, y=400)
+camera = Camera(WIN, tmx_data, screen_width, screen_height, zoom=1)
 
 # Main game loop
 running = True
@@ -122,8 +123,12 @@ while running:
         player.move(0, -player.speed)
     if keys[pygame.K_DOWN] or keys[pygame.K_s]:
         player.move(0, player.speed)
-
+    # Update
+    player.update(dt)  # Pass elapsed time in seconds to handle animations
     for enemy in enemy_manager.get_active_enemies():
+        enemy.update_animation(dt)  # Corrected method call
+
+#        enemy.update(dt)
         enemy.animation.play()
 
         if player.rect.colliderect(enemy.rect):
@@ -131,16 +136,20 @@ while running:
             combat = Combat(player, enemy)  # Pass the specific enemy instance to Combat
             combat.start()
 
-    # Update
-    player.update(dt)  # Pass elapsed time in seconds to handle animations
-    #camera.update(player)
 
+
+    camera.update(player)  # Focus camera on player
     enemy_manager.update_animation(dt)
 
     # Draw/render
     WIN.fill(WHITE)  # Clear the screen
-    draw_map(WIN, tmx_data)  # Draw the map with the camera applied
-    player.animation.draw(WIN, player.rect.topleft)
+    #draw_map() #WIN, tmx_data, tile_scale=1)  # Draw the map with the camera applied
+    camera.draw_map()
+    camera.draw_entities([player] + enemy_manager.get_active_enemies())  # Draw player and enemies
+
+    pygame.display.flip()  # Updating the screen
+
+    #player.animation.draw(WIN, player.rect.topleft, scale=2)
 
     # golem.update_animation(dt)  # Update golem animation
     # golem.display(WIN, (400, 300))  # Display golem at x=400, y=300
@@ -148,7 +157,6 @@ while running:
     # golem.animation.set_direction('left')
 
     enemy_manager.display_enemies()
-    pygame.display.flip()  # Updating the screen
 
 # Clean up
 pygame.quit()

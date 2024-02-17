@@ -21,9 +21,14 @@ def main_menu():
         print("Invalid choice. Try again.")
         main_menu()
 
-def class_menu():
+def class_menu(death=None):
     print("Select a Character Class:")
     class_options = ["Storm", "Fire", "Ice", "Death", "Life", "Myth", "Balance"]
+    if death:
+        selected_class = class_options[3]
+        print(f"Selected {selected_class}")
+        #tutorial(selected_class)
+        return selected_class
     for idx, cls in enumerate(class_options):
         print(f"{idx + 1}. {cls}")
 

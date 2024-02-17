@@ -35,17 +35,17 @@ class Animation:
         else:
             print(f"Error: Expected {self.num_frames} durations, but got {len(new_durations)}")
 
-    def draw(self, screen, position, camera=None):
+    def draw(self, screen, position, camera=None, scale=1):
         frame = self.get_current_frame()
-        if self.flip:  # Flip the frame if self.flip is True
-            frame = pygame.transform.flip(frame, True, False)
-
+        if self.flip:  # If the direction is set to 'left'
+            frame = pygame.transform.flip(frame, True, False)  # Flip the frame horizontally
+        # Apply scaling if needed
+        if scale != 1:
+            frame = pygame.transform.scale(frame, (int(self.sprite_size[0] * scale), int(self.sprite_size[1] * scale)))
+        # Adjust position based on camera if camera is provided
         if camera:
-            # Adjust the position for the camera
-            position = camera.apply(pygame.Rect(position, self.sprite_size))
-            screen.blit(frame, position.topleft)
-        else:
-            screen.blit(frame, position)
+            position = camera.apply(position)
+        screen.blit(frame, position)
 
     def play(self):
         self.is_playing = True
@@ -81,13 +81,13 @@ class Animation:
         return self.frames[self.current_frame]
 
     def set_direction(self, new_direction):
-        # Simplify to just handle flipping, not changing frame sets
+        print(f"Setting direction to: {new_direction}")  # Debug print
         if new_direction == 'left':
             self.flip = True
         elif new_direction == 'right':
             self.flip = False
-        else:
-            warnings.warn(f"Invalid direction: {new_direction}.")
+        #else:
+         #   warnings.warn(f"Invalid direction: {new_direction}.")
 
     def pause(self):
         if self.is_playing and not self.is_paused:

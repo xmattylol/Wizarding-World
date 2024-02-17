@@ -20,7 +20,7 @@ class Character:
         # Animation
         # Note: You would replace these parameter values as needed
         self.animation = Animation(sprite_sheet, sprite_size, num_frames, [200] * num_frames, loop=True)
-        self.rect = pygame.Rect(100, 100, sprite_size[0] * 4, sprite_size[1] * 4)
+        self.rect = pygame.Rect(100, 100, sprite_size[0], sprite_size[1])
         self.speed = 1
 
         self.damage_boosts = {

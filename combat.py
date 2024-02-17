@@ -25,6 +25,7 @@ class Combat:
                 print("You have been defeated. Try again!")
                 self.in_combat = False
 
+
             if self.enemy.is_defeated():
                 print("You have defeated the enemy!")
                 self.in_combat = False
