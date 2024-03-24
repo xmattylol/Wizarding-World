@@ -37,6 +37,7 @@ from combat import *
 from Animation import *
 import pytmx
 from Camera import Camera
+from Level import Level
 
 # Initialize Pygame
 pygame.init()
@@ -48,11 +49,13 @@ screen_height = 600
 # Window Setup
 WIN = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Wizarding World")
+level = Level("data/tmx/testmap1.tmx", WIN)
+
 tmx_data = pytmx.load_pygame("data/tmx/testmap1.tmx")
 
 # Calculate the pixel dimensions of the map
-map_width = tmx_data.width * tmx_data.tilewidth
-map_height = tmx_data.height * tmx_data.tileheight
+#map_width = tmx_data.width * tmx_data.tilewidth
+#map_height = tmx_data.height * tmx_data.tileheight
 
 # Initialize the camera with the map dimensions
 #camera = Camera(map_width, map_height)
@@ -99,7 +102,7 @@ enemy_manager = EnemyManager(WIN, EnemyManager.enemy_templates)
 #golem.animation.play()  # Starting the animation
 enemy_manager.spawn_enemy('golem', x=200, y=200)
 enemy_manager.spawn_enemy('golem', x=250, y=400)
-camera = Camera(WIN, tmx_data, screen_width, screen_height, zoom=1)
+camera = Camera(WIN, tmx_data, screen_width, screen_height, zoom=2)
 
 # Main game loop
 running = True
@@ -143,10 +146,11 @@ while running:
 
     # Draw/render
     WIN.fill(WHITE)  # Clear the screen
-    #draw_map() #WIN, tmx_data, tile_scale=1)  # Draw the map with the camera applied
-    camera.draw_map()
-    camera.draw_entities([player] + enemy_manager.get_active_enemies())  # Draw player and enemies
+    level.draw(camera)  # Draw the entire level, including obstacles
 
+    #draw_map() #WIN, tmx_data, tile_scale=1)  # Draw the map with the camera applied
+    #camera.draw_map()
+    camera.draw_entities([player] + enemy_manager.get_active_enemies())  # Draw player and enemies
     pygame.display.flip()  # Updating the screen
 
     #player.animation.draw(WIN, player.rect.topleft, scale=2)

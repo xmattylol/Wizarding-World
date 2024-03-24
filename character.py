@@ -145,24 +145,21 @@ class Character:
         self.animation.draw(screen, self.rect.topleft)
 
     def move(self, dx, dy):
-        """Move the character by dx and dy."""
-        if dx != 0 or dy != 0:
-            self.animation.play()  # Ensure the animation plays while moving
+        if dx > 0:  # Moving right
+            self.animation.set_direction('right')
+        elif dx < 0:  # Moving left
+            self.animation.set_direction('left')
 
-            # Implement the directions
-            if dx > 0:  # Moving right
-                self.animation.set_direction('right')
-            elif dx < 0:  # Moving left
-                self.animation.set_direction('left')
-            elif dy > 0:  # Moving down
-                self.animation.set_direction('down')
-            elif dy < 0:  # Moving up
-                self.animation.set_direction('up')
-        else:
-            self.animation.stop()  # Consider stopping or resetting animation when not moving
-
+        # Assuming vertical movement doesn't require sprite flipping, but adjust as needed.
+        # Update the character's position
         self.rect.x += dx
         self.rect.y += dy
+
+        # If moving, play the animation
+        if dx != 0 or dy != 0:
+            self.animation.play()
+        else:
+            self.animation.stop()
 
     # def display_stats(self, screen, font):
     #     # Display character health
